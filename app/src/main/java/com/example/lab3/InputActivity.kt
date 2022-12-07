@@ -1,5 +1,6 @@
 package com.example.lab3
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -20,5 +21,18 @@ class InputActivity : AppCompatActivity() {
         incsize=findViewById(R.id.incrase)
         decsize=findViewById(R.id.decrase)
         okButton=findViewById(R.id.OK)
+        okButton.setOnClickListener({
+            var intent:Intent=Intent()
+            intent.putExtra("SIZE_X",sizeX.text.toString().toInt())
+            intent.putExtra("SIZE_Y",sizeY.text.toString().toInt())
+            if(incsize.isChecked)
+                intent.putExtra("CHANGE",1)
+            else
+                intent.putExtra("CHANGE",-1)
+            setResult(RESULT_OK,intent)
+
+            finish()
+        })
     }
+
 }
