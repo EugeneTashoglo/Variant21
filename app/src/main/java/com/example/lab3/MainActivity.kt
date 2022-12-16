@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity() {
     private var size_X:Int = 0
     private var size_Y:Int = 0
     private var change:Int = 0
+    private lateinit var  changeItemMenu:MenuItem
     private lateinit var view:View;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +23,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu,menu)
+        changeItemMenu= menu!!.findItem(R.id.action_change)
+        changeItemMenu.isEnabled=false
         return true
     }
 
@@ -59,6 +62,7 @@ class MainActivity : AppCompatActivity() {
                 size_X=intent.getIntExtra("SIZE_X",0)
                 size_Y=intent.getIntExtra("SIZE_Y",0)
                 change=intent.getIntExtra("CHANGE",0)
+                changeItemMenu.isEnabled=true
             }
         }
 
