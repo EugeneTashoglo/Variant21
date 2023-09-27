@@ -9,7 +9,7 @@
     android:padding="@dimen/window"
     android:background="#C3D613"
     android:gravity="center"
-    tools:context=".InputActivity">
+    tools:context="InputActivity">
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
         android:inputType="numberDecimal"
         android:layout_marginBottom="@dimen/margin"
         android:layout_marginTop="@dimen/margin"
-        android:hint="@string/sizeX"
+        android:hint="@string/min"
         />
     <EditText
         android:layout_width="match_parent"
@@ -28,7 +28,7 @@
         android:inputType="numberDecimal"
         android:layout_marginBottom="@dimen/margin"
         android:layout_marginTop="@dimen/margin"
-        android:hint="@string/sizeY"
+        android:hint="@string/max"
         />
     <RadioGroup
         android:layout_width="match_parent"
@@ -44,7 +44,7 @@
             android:textSize="@dimen/font"
             android:layout_marginBottom="@dimen/margin"
             android:layout_marginTop="@dimen/margin"
-            android:text="@string/incrase"/>
+            android:text="@string/hardirve"/>
         <RadioButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
             android:textSize="@dimen/font"
             android:layout_marginBottom="@dimen/margin"
             android:layout_marginTop="@dimen/margin"
-            android:text="@string/decrase"/>
+            android:text="@string/price"/>
     </RadioGroup>
     <Button
         android:layout_width="match_parent"
@@ -62,4 +62,10 @@
         android:layout_marginBottom="@dimen/margin"
         android:layout_marginTop="@dimen/margin"
         android:text="@string/OK"/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="В этом окне вы можете ввести минимальный размер жесткого диска и максимальную цену в соответствующие поля ввода и выбрать способ сортировки с помощью радио-кнопок" />
 </LinearLayout>

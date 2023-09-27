@@ -1,69 +1,84 @@
 package com.example.lab3
 
-import android.app.Activity
+
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import androidx.activity.result.contract.ActivityResultContracts
+import android.widget.ArrayAdapter
+import android.widget.ListView
+import androidx.appcompat.app.AppCompatActivity
+
+data class Computer(val type: String, val price: Int, val hardDrive: Int)
 
 class MainActivity : AppCompatActivity() {
-    private var size_X:Int = 0
-    private var size_Y:Int = 0
-    private var change:Int = 0
-    private lateinit var  changeItemMenu:MenuItem
-    private lateinit var view:View;
+    private lateinit var listView: ListView
+    private val computers = mutableListOf<Computer>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        view=findViewById(R.id.figure)
+
+        listView = findViewById(R.id.listView)
+
+        val inputStream = assets.open("computer.txt")
+        inputStream.bufferedReader().forEachLine { line ->
+            val parts = line.split(" ")
+            computers.add(Computer(parts[0], parts[1].toInt(), parts[2].toInt()))
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu,menu)
-        changeItemMenu= menu!!.findItem(R.id.action_change)
-        changeItemMenu.isEnabled=false
+        menuInflater.inflate(R.menu.main_menu, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        var id:Int=item.itemId
-        when(id)
-        {
-            R.id.action_input-> {
-                var intent: Intent =Intent(this,InputActivity::class.java)
-                getResult.launch(intent)
+
+        when (item.itemId) {
+            R.id.chose -> {
+                val intent = Intent(this, InputActivity::class.java)
+                startActivityForResult(intent, 1)
             }
-            R.id.action_change->
-            {
-                if(change==1){
-                    view.layoutParams.width+=size_X
-                    view.layoutParams.height+=size_Y
-                    view.requestLayout()
-                }
-                else if(change==-1)
-                {
-                    view.layoutParams.width-=size_X
-                    view.layoutParams.height-=size_Y
-                    view.requestLayout()
-                }
+            R.id.action_change -> {
+                val adapter = ArrayAdapter(
+                    this,
+                    android.R.layout.simple_list_item_1,
+                    computers.map { "${it.type} ${it.price} ${it.hardDrive}" })
+                listView.adapter = adapter
             }
-            R.id.action_exit->this.finish()
+            R.id.action_exit -> {
+                finish()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
-    private val getResult=
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-        {
-            if(it.resultCode== Activity.RESULT_OK){
-                var intent:Intent=it.data!!
-                size_X=intent.getIntExtra("SIZE_X",0)
-                size_Y=intent.getIntExtra("SIZE_Y",0)
-                change=intent.getIntExtra("CHANGE",0)
-                changeItemMenu.isEnabled=true
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            val minHardDrive = data?.getIntExtra("minHardDrive", 0) ?: 0
+            val maxPrice = data?.getIntExtra("maxPrice", Int.MAX_VALUE) ?: Int.MAX_VALUE
+            val sortBy = data?.getStringExtra("sortBy") ?: "Hard drive"
+
+            val filteredComputers = computers.filter { it.hardDrive >= minHardDrive && it.price <= maxPrice }
+            val sortedComputers = when (sortBy) {
+                "Hard drive" -> filteredComputers.sortedBy { it.hardDrive }
+                "Price" -> filteredComputers.sortedBy { it.price }
+                else -> filteredComputers
             }
+
+            val adapter = ArrayAdapter(
+                this,
+                android.R.layout.simple_list_item_1,
+                sortedComputers.map { "${it.type} ${it.price} ${it.hardDrive}" })
+            listView.adapter = adapter
         }
 
+    }
+
 }
+
+
+
+

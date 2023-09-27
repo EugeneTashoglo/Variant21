@@ -1,0 +1,4 @@
+Desktop 500 256
+Laptop 800 512
+Desktop 600 512
+Laptop 1000 1024
